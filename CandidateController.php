@@ -55,11 +55,11 @@ class CandidateController extends Controller
         $candidate->name = $request->name;
         $candidate->email = $request->email;
         $candidate->phone = $request->phone;
-       // Generate a default password if the user did not provide one
-    $password = $request->password ? $request->password : substr($request->name, 0, 4) . substr($request->phone, 0, 4);
+        // Generate a default password if the user did not provide one
+    	$password = $request->password ? $request->password : substr($request->name, 0, 4) . substr($request->phone, 0, 4);
 
-    // Hash the password before storing it in the database
-    $candidate->password = Hash::make($password);
+        // Hash the password before storing it in the database
+        $candidate->password = Hash::make($password);
         if ($candidate->save()) {
 
             $documentTypes = DocumentType::all();
@@ -146,23 +146,7 @@ class CandidateController extends Controller
                 }
             }
 
-            // if ($request->has('answers')) {
-            //     foreach ($request->answers as $questionId => $answer) {
-            //         CandidateQuestionAnswer::updateOrCreate(
-            //             [
-            //                 'candidate_id' => $candidate->id,
-            //                 'question_id' => $questionId,
-            //             ],
-            //             [
-            //                 'answer' => $answer,
-            //             ]
-            //         );
-
-            //     }
-            // }
             toast('Candidate updated successfully.','success');
-            // $candidate->notify(new NewCandidateNotification($candidate));
-            //$candidate->notify(new CandidateDocumentUploadNotification());
             return redirect()->route('admin.candidates.index');
         }
 
@@ -221,9 +205,9 @@ class CandidateController extends Controller
         $user->password = $candidate->password;
         $user->save();
         $role = Role::where('name','Employee')->first();
-        //$token = Crypt::encryptString($candidate->id);
+
         $user->assignRole([$role->id]);
-        //$candidate->notify(new CandidatePolicyLinkNotification($candidate,$token));
+
         $user->notify(new EmployeeDataNotification($user));
 
         return redirect()->route('admin.candidates.index')->with('message', 'Candidate converted to Employee successfully.');

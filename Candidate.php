@@ -16,17 +16,19 @@ class Candidate extends Authenticatable
         'phone',
         'password',
         'status',
-        'documents_verified', // Added new column here
+        'documents_verified'
     ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
+    
     public function documents()
     {
         return $this->hasMany(CandidateDocument::class, 'candidate_id');
     }
+    
     public function canConvertToEmployee()
     {
         return $this->documents_verified == 1 && !User::where('candidate_id', $this->id)->exists();
