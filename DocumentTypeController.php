@@ -48,6 +48,7 @@ class DocumentTypeController extends Controller
      */
     public function show(DocumentType $documentTypes)
     {
+        abort_if(Gate::denies('document_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.document_types.show', compact('documentType'));
     }
 
