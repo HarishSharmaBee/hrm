@@ -12,7 +12,7 @@ class AdminController extends Controller
     public function index()
     {
         $count['users'] = User::whereDoesntHave('roles', function ($query) {
-                $query->whereIn('name', ['Sub Admin','Admin']);
+                $query->whereIn('name', ['Sub Admin']);
             })->count();
         $count['candidate'] = Candidate::count();
         $count['posts_read'] = 0;
